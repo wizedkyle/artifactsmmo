@@ -33,6 +33,6 @@ jobs:
           push: true
           file: build/miner/Dockerfile
           platforms: linux/amd64
-          tags:
+          tags: |
             wizedkyle.azurecr.io/miner:latest
             wizedkyle.azurecr.io/miner:1.0.${{ github.run_id }}
