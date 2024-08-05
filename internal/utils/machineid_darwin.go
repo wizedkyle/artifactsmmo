@@ -1,6 +1,13 @@
 package utils
 
-import "go.uber.org/zap"
+import (
+	"bytes"
+	"go.uber.org/zap"
+	"io"
+	"os"
+	"os/exec"
+	"strings"
+)
 
 func extractId(lines string) string {
 	for _, line := range strings.Split(lines, "\n") {

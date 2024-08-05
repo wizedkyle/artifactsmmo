@@ -18,8 +18,8 @@ func NewCmdConfigure() *cobra.Command {
 	)
 	cmd := &cobra.Command{
 		Use:   "configure",
-		Short: "Configures artifactsmmo credentials.",
-		Long:  "Configures artifactsmmo cli with a configuration file stating the token and character name for use in subsequent commands.",
+		Short: "Configures artifacts credentials.",
+		Long:  "Configures artifacts cli with a configuration file stating the token and character name for use in subsequent commands.",
 		Run: func(cmd *cobra.Command, args []string) {
 			setCredentials(characterName, token)
 		},

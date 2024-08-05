@@ -37,5 +37,6 @@ func gatherResource() {
 		fmt.Printf("%s is currently on cooldown\n", *artifacts.Client.CharacterName)
 		return
 	}
-	fmt.Printf("%s gathered %v. Character cooldown is %d\n", *artifacts.Client.CharacterName, res.Data.Details.Items, res.Data.Cooldown.RemainingSeconds)
+	diff := utils.CalculateTimeDifference(res.Data.Cooldown.StartedAt, res.Data.Cooldown.Expiration)
+	fmt.Printf("%s gathered %v. Character cooldown is %f seconds.\n", *artifacts.Client.CharacterName, res.Data.Details.Items, diff.Seconds())
 }

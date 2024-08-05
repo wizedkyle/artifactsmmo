@@ -40,9 +40,13 @@ func moveCharacter(x int, y int) {
 	if errors.Is(err, utils.ErrCharacterAtDestination) {
 		fmt.Printf("%s is already at the desired location x=%d y=%d\n", *artifacts.Client.CharacterName, x, y)
 		return
+	} else if errors.Is(err, utils.ErrCharacterCooldown) {
+		fmt.Printf("%s is currently on cooldown\n", *artifacts.Client.CharacterName)
+		return
 	} else if err != nil {
 		utils.Logger.Error("failed to move character", zap.Error(err))
 		return
 	}
-	fmt.Printf("%s is currently at location x=%d y=%d. Character cooldown is %d\n", *artifacts.Client.CharacterName, x, y, &resp.Data.Cooldown.RemainingSeconds)
+	diff := utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration)
+	fmt.Printf("%s is currently at location x=%d y=%d. Character cooldown is %f seconds.\n", *artifacts.Client.CharacterName, x, y, diff.Seconds())
 }

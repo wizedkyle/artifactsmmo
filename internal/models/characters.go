@@ -7,6 +7,15 @@ type ActionMove struct {
 	Y int `json:"y"`
 }
 
+type CreateCharacter struct {
+	Name string `json:"name"`
+	Skin string `json:"skin"`
+}
+
+type CharacterResponse struct {
+	Data Character `json:"data"`
+}
+
 type CharacterGatheringResponse struct {
 	Data CharacterGathering `json:"data"`
 }

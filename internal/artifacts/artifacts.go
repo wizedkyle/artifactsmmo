@@ -26,6 +26,8 @@ const (
 	server = "https://api.artifactsmmo.com"
 )
 
+// Init
+// Initialises objects needed for artifact api calls.
 func Init() {
 	token, ok := os.LookupEnv("TOKEN")
 	if !ok {
@@ -33,7 +35,7 @@ func Init() {
 		viper.AddConfigPath(filepath.Dir(utils.ConfigPath(true)))
 		err := viper.ReadInConfig()
 		if err != nil {
-			utils.Logger.Fatal("failed to read creds file", zap.Error(err))
+			utils.Logger.Fatal("failed to read credentials file", zap.Error(err))
 		}
 		characterName := viper.GetString("characterName")
 		tokenEncrypted := viper.GetString("token")
@@ -41,6 +43,11 @@ func Init() {
 		Client.CharacterName = &characterName
 		Client.Token = &tokenDecrypted
 	} else {
+		characterName, ok := os.LookupEnv("CHARACTER_NAME")
+		if !ok {
+			utils.Logger.Fatal("CHARACTER_NAME environment variable not set")
+		}
+		Client.CharacterName = &characterName
 		Client.Token = &token
 	}
 	Client.Client = &http.Client{
