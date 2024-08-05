@@ -9,6 +9,8 @@ jobs:
   build-miner-image:
     name: Build Miner Image
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -22,9 +24,9 @@ jobs:
       - name: Login to Azure Container Registry
         uses: docker/login-action@v3
         with:
-          registry: "wizedkyle.azurecr.io"
-          username: ${{ vars.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+          registry: "ghcr.io"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push image
         uses: docker/build-push-action@v5
@@ -34,5 +36,5 @@ jobs:
           file: build/miner/Dockerfile
           platforms: linux/amd64
           tags: |
-            wizedkyle.azurecr.io/miner:latest
-            wizedkyle.azurecr.io/miner:1.0.${{ github.run_id }}
+            ghcr.io/artifactsmmo/miner:latest
+            ghcr.io/artifactsmmo/miner:1.0.${{ github.run_id }}
