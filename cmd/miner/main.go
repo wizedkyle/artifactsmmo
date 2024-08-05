@@ -24,7 +24,8 @@ func main() {
 		if !ok {
 			c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
 			if err != nil {
-				utils.Logger.Fatal("failed to get character information", zap.Error(err))
+				utils.Logger.Error("failed to get character information", zap.Error(err))
+				continue
 			}
 			if c.Data.MiningLevel < models.IronLevel {
 				x = models.CopperX
@@ -60,7 +61,8 @@ func main() {
 		}
 		c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
 		if err != nil {
-			utils.Logger.Fatal("failed to get character information", zap.Error(err))
+			utils.Logger.Error("failed to get character information", zap.Error(err))
+			continue
 		}
 		if c.Data.X != x || c.Data.Y != y {
 			fmt.Printf("moving character to x=%d y=%d\n", x, y)
@@ -70,7 +72,7 @@ func main() {
 			})
 			if err != nil {
 				utils.Logger.Error("failed to move character", zap.Error(err))
-				return
+				continue
 			}
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 		}
@@ -83,13 +85,14 @@ func main() {
 			})
 			if err != nil {
 				utils.Logger.Error("failed to move character", zap.Error(err))
-				return
+				continue
 			}
 			fmt.Printf("moving character to bank (x=%d y=%d)\n", bankX, bankY)
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 			c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
 			if err != nil {
-				utils.Logger.Fatal("failed to get character information", zap.Error(err))
+				utils.Logger.Error("failed to get character information", zap.Error(err))
+				continue
 			}
 			controllers.DepositAllInventory(c.Data.Inventory)
 			resp, err = artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
@@ -98,7 +101,7 @@ func main() {
 			})
 			if err != nil {
 				utils.Logger.Error("failed to move character", zap.Error(err))
-				return
+				continue
 			}
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 		} else if err == nil {
