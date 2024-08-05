@@ -36,5 +36,5 @@ jobs:
           file: build/miner/Dockerfile
           platforms: linux/amd64
           tags: |
-            ghcr.io/artifactsmmo/miner:latest
-            ghcr.io/artifactsmmo/miner:1.0.${{ github.run_id }}
+            ghcr.io/wizedkyle/artifactsmmo/miner:latest
+            ghcr.io/wizedkyle/artifactsmmo/miner:1.0.${{ github.run_id }}
