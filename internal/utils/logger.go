@@ -11,3 +11,12 @@ func LoggerInit() {
 	}
 	Logger = l
 }
+
+func WriteErrorLog(err *Error) {
+	Logger.Error(err.ExternalError.Message,
+		zap.Error(err.InternalError),
+		zap.String("id", err.ExternalError.Id),
+		zap.String("message", err.ExternalError.Message),
+		zap.Int("code", err.ExternalError.Code),
+		zap.String("transactionId", err.ExternalError.TransactionId))
+}

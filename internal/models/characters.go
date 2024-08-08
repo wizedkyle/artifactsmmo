@@ -115,8 +115,8 @@ type CraftingDetails struct {
 }
 
 type Item struct {
-	Code     string `json:"code"`
-	Quantity int    `json:"quantity"`
+	Code     string `bson:"code" json:"code"`
+	Quantity int    `bson:"quantity" json:"quantity"`
 }
 
 type Content struct {
@@ -127,6 +127,7 @@ type Content struct {
 
 type Destination struct {
 	Name    string  `json:"name"`
+	Skin    string  `json:"skin"`
 	X       int     `json:"x"`
 	Y       int     `json:"y"`
 	Content Content `json:"content,omitempty"`

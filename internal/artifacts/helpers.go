@@ -1,6 +1,8 @@
 package artifacts
 
-import "github.com/wizedkyle/artifactsmmo/v2/internal/models"
+import (
+	"github.com/wizedkyle/artifactsmmo/v2/internal/models"
+)
 
 // FindBuilding
 // Returns the coordinates for different buildings.

@@ -17,24 +17,24 @@ type BankDepositResponse struct {
 }
 
 type ItemDetails struct {
-	Name        string           `json:"name"`
-	Code        string           `json:"code"`
-	Level       int              `json:"level"`
-	Type        string           `json:"type"`
-	SubType     string           `json:"subType"`
-	Description string           `json:"description"`
-	Effects     []ItemEffect     `json:"effects,omitempty"`
-	Craft       CraftInformation `json:"craft,omitempty"`
+	Name        string           `bson:"name" json:"name"`
+	Code        string           `bson:"code" json:"code"`
+	Level       int              `bson:"level" json:"level"`
+	Type        string           `bson:"type" json:"type"`
+	SubType     string           `bson:"subType" json:"subType"`
+	Description string           `bson:"description" json:"description"`
+	Effects     []ItemEffect     `bson:"effects,omitempty" json:"effects,omitempty"`
+	Craft       CraftInformation `bson:"craft,omitempty" json:"craft,omitempty"`
 }
 
 type ItemEffect struct {
-	Name  string `json:"name"`
-	Value int    `json:"value"`
+	Name  string `bson:"name" json:"name"`
+	Value int    `bson:"value" json:"value"`
 }
 
 type CraftInformation struct {
-	Skill    string `json:"skill,omitempty"`
-	Level    int    `json:"level,omitempty"`
-	Items    []Item `json:"items,omitempty"`
-	Quantity int    `json:"quantity,omitempty"`
+	Skill    string `bson:"skill,omitempty" json:"skill,omitempty"`
+	Level    int    `bson:"level,omitempty" json:"level,omitempty"`
+	Items    []Item `bson:"items,omitempty" json:"items,omitempty"`
+	Quantity int    `bson:"quantity,omitempty" json:"quantity,omitempty"`
 }
