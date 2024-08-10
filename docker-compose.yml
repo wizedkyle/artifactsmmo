@@ -1,0 +1,35 @@
+services:
+  mongodb:
+    image: mongo:4.2.23-bionic
+    container_name: mongodb
+    ports: ["27017:27017"]
+  api:
+    image: cosmtrek/air
+    container_name: api
+    working_dir: /app
+    ports: ["9000:9000"]
+    command:
+      - air -c ./.air.toml --
+    volumes:
+      - ./:/app
+    environment:
+      - GIN_MODE=${GIN_MODE}
+      - CHARACTER_NAME=${CHARACTER_NAME}
+      - TOKEN=${TOKEN}
+  sync:
+    container_name: sync
+    build:
+      dockerfile: build/sync/Dockerfile
+      context: .
+    environment:
+      - CHARACTER_NAME=${CHARACTER_NAME}
+      - TOKEN=${TOKEN}
+  worker:
+    container_name: worker
+    build:
+      dockerfile: build/worker/Dockerfile
+      context: .
+    environment:
+      - CHARACTER_NAME=${CHARACTER_NAME}
+      - TOKEN=${TOKEN}
+      - GIN_MODE=${GIN_MODE}
