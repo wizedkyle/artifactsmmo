@@ -30,10 +30,10 @@ func main() {
 			if c.Data.FishingLevel < models.ShrimpLevel {
 				x = models.GudgeonX
 				y = models.GudgeonY
-			} else if c.Data.MiningLevel < models.TroutLevel {
+			} else if c.Data.FishingLevel < models.TroutLevel {
 				x = models.ShrimpX
 				y = models.ShrimpY
-			} else if c.Data.MiningLevel < models.BassLevel {
+			} else if c.Data.FishingLevel < models.BassLevel {
 				x = models.TroutX
 				y = models.TroutY
 			} else {
