@@ -78,24 +78,38 @@ func main() {
 		}
 		resp, err := artifacts.Client.ActionGathering(*artifacts.Client.CharacterName)
 		if errors.Is(err, utils.ErrCharacterInventoryFull) {
-			bankX, bankY := artifacts.Client.FindBuilding(models.Bank)
-			resp, err := artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
-				X: bankX,
-				Y: bankY,
-			})
-			if err != nil {
-				utils.Logger.Error("failed to move character", zap.Error(err))
-				continue
+			if x == models.BassX || x == models.TroutX {
+				bankX, bankY := artifacts.Client.FindBuilding(models.SouthBank)
+				resp, err := artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
+					X: bankX,
+					Y: bankY,
+				})
+				if err != nil {
+					utils.Logger.Error("failed to move character", zap.Error(err))
+					continue
+				}
+				fmt.Printf("moving character to bank (x=%d y=%d)\n", bankX, bankY)
+				time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
+			} else {
+				bankX, bankY := artifacts.Client.FindBuilding(models.Bank)
+				resp, err := artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
+					X: bankX,
+					Y: bankY,
+				})
+				if err != nil {
+					utils.Logger.Error("failed to move character", zap.Error(err))
+					continue
+				}
+				fmt.Printf("moving character to bank (x=%d y=%d)\n", bankX, bankY)
+				time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 			}
-			fmt.Printf("moving character to bank (x=%d y=%d)\n", bankX, bankY)
-			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 			c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
 			if err != nil {
 				utils.Logger.Error("failed to get character information", zap.Error(err))
 				continue
 			}
 			controllers.DepositAllInventory(c.Data.Inventory)
-			resp, err = artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
+			resp, err := artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
 				X: x,
 				Y: y,
 			})

@@ -7,9 +7,24 @@ import (
 // FindBuilding
 // Returns the coordinates for different buildings.
 func (a *artifacts) FindBuilding(building string) (int, int) {
-	if building == models.Bank {
+	switch building {
+	case models.Bank:
 		return models.BankX, models.BankY
-	} else {
+	case models.SouthBank:
+		return models.SouthBankX, models.SouthBankY
+	case models.CookingWorkshop:
+		return models.CookingWorkshopX, models.CookingWorkshopY
+	case models.GearcraftingWorkshop:
+		return models.GearcraftingWorkshopX, models.GearcraftingWorkshopY
+	case models.JewelrycraftingWorkshop:
+		return models.JewelrycraftingWorkshopX, models.JewelrycraftingWorkshopY
+	case models.MiningWorkshop:
+		return models.MiningWorkshopX, models.MiningWorkshopY
+	case models.WeaponcraftingWorkshop:
+		return models.WeaponcraftingWorkshopX, models.WeaponcraftingWorkshopY
+	case models.WoodcuttingWorkshop:
+		return models.WoodcuttingWorkshopX, models.WoodcuttingWorkshopY
+	default:
 		return 0, 0
 	}
 }
@@ -28,4 +43,10 @@ func (a *artifacts) FindRocks(rock string) (int, int) {
 	} else {
 		return 0, 0
 	}
+}
+
+// FindTrees
+// Returns the coordinates for different tree resources.
+func (a *artifacts) FindTrees(tree string) (int, int) {
+	return 0, 0
 }
