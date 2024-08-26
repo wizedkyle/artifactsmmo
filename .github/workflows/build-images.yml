@@ -106,7 +106,7 @@ jobs:
             ghcr.io/wizedkyle/artifactsmmo/woodcutting:1.0.${{ github.run_id }}
 
   build-fishing-image:
-    name: Build Woodcutting Image
+    name: Build Fishing Image
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -137,3 +137,69 @@ jobs:
           tags: |
             ghcr.io/wizedkyle/artifactsmmo/fishing:latest
             ghcr.io/wizedkyle/artifactsmmo/fishing:1.0.${{ github.run_id }}
+
+  build-worker-image:
+    name: Build Worker Image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: "ghcr.io"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          file: build/worker/Dockerfile
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/wizedkyle/artifactsmmo/worker:latest
+            ghcr.io/wizedkyle/artifactsmmo/worker:1.0.${{ github.run_id }}
+
+  build-api-image:
+    name: Build API Image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: "ghcr.io"
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          file: build/api/Dockerfile
+          platforms: linux/amd64
+          tags: |
+            ghcr.io/wizedkyle/artifactsmmo/api:latest
+            ghcr.io/wizedkyle/artifactsmmo/api:1.0.${{ github.run_id }}
