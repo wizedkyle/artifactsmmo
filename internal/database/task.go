@@ -18,6 +18,7 @@ func (d *database) CreateTask(task models.Task) (*models.Task, error) {
 		result models.Task
 	)
 	task.Id = uuid.NewString()
+	task.Status = models.TaskStatusPending
 	_, err := d.TaskCollection.InsertOne(context.TODO(), task)
 	if err != nil {
 		return nil, err
@@ -46,12 +47,18 @@ func (d *database) GetTask(id string) (*models.Task, error) {
 
 // ListTasks
 // Returns tasks from the database based on the supplied filters.
-func (d *database) ListTasks(action string, limit int64, status string) (*[]models.Task, error) {
+func (d *database) ListTasks(action string, character string, limit int64, status string) (*[]models.Task, error) {
 	var tasks []models.Task
 	opts := options.Find().SetLimit(limit)
-	filter := bson.D{
-		{"action", action},
-		{"status", status},
+	filter := bson.D{}
+	if action != "" {
+		filter = append(filter, bson.E{"action", action})
+	}
+	if character != "" {
+		filter = append(filter, bson.E{"character", character})
+	}
+	if status != "" {
+		filter = append(filter, bson.E{"status", status})
 	}
 	cursor, err := d.TaskCollection.Find(context.TODO(), filter, opts)
 	if err != nil {
@@ -73,4 +80,25 @@ func (d *database) ListTasks(action string, limit int64, status string) (*[]mode
 		return nil, utils.ErrTasksNotFound
 	}
 	return &tasks, nil
+}
+
+// UpdateTask
+// Updates an existing task in the database.
+func (d *database) UpdateTask(id string, reason string, status string) error {
+	filter := bson.D{
+		{"_id", id},
+	}
+	update := bson.D{
+		{"$set", bson.D{
+			{"status", status},
+			{"errorReason", reason},
+		}},
+	}
+	err := d.TaskCollection.FindOneAndUpdate(context.TODO(), filter, update).Err()
+	if errors.Is(err, mongo.ErrNoDocuments) {
+		return utils.ErrTaskNotFound
+	} else if err != nil {
+		return err
+	}
+	return nil
 }

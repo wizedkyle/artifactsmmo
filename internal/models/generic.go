@@ -31,6 +31,7 @@ const (
 	Copper                   string = "copper_ore"
 	CopperX                  int    = 2
 	CopperY                  int    = 0
+	Combat                   string = "combat"
 	DeadTree                 string = "dead_tree"
 	DeadTreeLevel            int    = 30
 	DeadTreeX                int    = 9

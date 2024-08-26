@@ -1,65 +1,32 @@
-package main
+package controllers
 
 import (
 	"errors"
 	"fmt"
 	"github.com/wizedkyle/artifactsmmo/v2/internal/artifacts"
-	"github.com/wizedkyle/artifactsmmo/v2/internal/controllers"
+	"github.com/wizedkyle/artifactsmmo/v2/internal/database"
 	"github.com/wizedkyle/artifactsmmo/v2/internal/models"
 	"github.com/wizedkyle/artifactsmmo/v2/internal/utils"
 	"go.uber.org/zap"
-	"os"
 	"time"
 )
 
-func main() {
-	utils.LoggerInit()
-	artifacts.Init()
-	for {
+func CompleteCombatOrder(task models.Task) (string, error) {
+	err := database.Client.UpdateTask(task.Id, "", models.TaskStatusRunning)
+	if err != nil {
+		utils.Logger.Error("failed to update task status", zap.String("task", task.Id), zap.Error(err))
+		return "failed to update task status", err
+	}
+	for i := 0; i < task.Quantity; i++ {
 		var (
 			x int
 			y int
 		)
-		woodResource, ok := os.LookupEnv("WOOD_RESOURCE")
-		if !ok {
-			c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
-			if err != nil {
-				utils.Logger.Error("failed to get character information", zap.Error(err))
-				continue
-			}
-			if c.Data.WoodcuttingLevel < models.SpruceTreeLevel {
-				x = models.AshTeeX
-				y = models.AshTreeY
-			} else if c.Data.WoodcuttingLevel < models.BirchTreeLevel {
-				x = models.SpruceTreeX
-				y = models.SpruceTreeY
-			} else if c.Data.WoodcuttingLevel < models.DeadTreeLevel {
-				x = models.BirchTreeX
-				x = models.BirchTreeY
-			} else {
-				x = models.DeadTreeX
-				y = models.DeadTreeY
-			}
-		} else {
-			switch woodResource {
-			case models.AshTree:
-				x = models.AshTeeX
-				y = models.AshTreeY
-			case models.SpruceTree:
-				x = models.SpruceTreeX
-				y = models.SpruceTreeY
-			case models.BirchTree:
-				x = models.BirchTreeX
-				y = models.BirchTreeY
-			default:
-				x = models.AshTeeX
-				y = models.AshTreeY
-			}
-		}
+		x, y = artifacts.Client.FindMonster(task.Monster)
 		c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
 		if err != nil {
 			utils.Logger.Error("failed to get character information", zap.Error(err))
-			continue
+			return "failed to get character information", err
 		}
 		if c.Data.X != x || c.Data.Y != y {
 			fmt.Printf("moving character to x=%d y=%d\n", x, y)
@@ -73,7 +40,7 @@ func main() {
 			}
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 		}
-		resp, err := artifacts.Client.ActionGathering(*artifacts.Client.CharacterName)
+		resp, err := artifacts.Client.ActionFight(*artifacts.Client.CharacterName)
 		if errors.Is(err, utils.ErrCharacterInventoryFull) {
 			bankX, bankY := artifacts.Client.FindBuilding(models.Bank)
 			resp, err := artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
@@ -91,7 +58,7 @@ func main() {
 				utils.Logger.Error("failed to get character information", zap.Error(err))
 				continue
 			}
-			controllers.DepositAllInventory(c.Data.Inventory)
+			DepositAllInventory(c.Data.Inventory)
 			resp, err = artifacts.Client.ActionMove(*artifacts.Client.CharacterName, models.ActionMove{
 				X: x,
 				Y: y,
@@ -101,9 +68,12 @@ func main() {
 				continue
 			}
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
-		} else if err == nil {
-			fmt.Printf("%s collected %v\n", *artifacts.Client.CharacterName, resp.Data.Details.Items)
+		} else if err != nil {
+			utils.Logger.Error("failed to fight", zap.Error(err))
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 		}
+		fmt.Printf("%s fought %s and %s. It dropped %v. %d remaining to fight\n", *artifacts.Client.CharacterName, task.Monster, resp.Data.Fight.Result, resp.Data.Fight.Drops, i)
+		time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 	}
+	return "", nil
 }

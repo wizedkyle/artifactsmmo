@@ -5,11 +5,27 @@ type ActionDepositBank struct {
 	Quantity int    `json:"quantity"`
 }
 
+type ActionWithdrawBank struct {
+	Code     string `json:"code"`
+	Quantity int    `json:"quantity"`
+}
+
 type ActionDepositBankResponse struct {
 	Data BankDepositResponse `json:"data"`
 }
 
 type BankDepositResponse struct {
+	Cooldown  Cooldown    `json:"cooldown"`
+	Item      ItemDetails `json:"item"`
+	Bank      []Item      `json:"bank"`
+	Character Character   `json:"character"`
+}
+
+type WithdrawBankResponse struct {
+	Data WithdrawBank `json:"data"`
+}
+
+type WithdrawBank struct {
 	Cooldown  Cooldown    `json:"cooldown"`
 	Item      ItemDetails `json:"item"`
 	Bank      []Item      `json:"bank"`
@@ -37,4 +53,17 @@ type CraftInformation struct {
 	Level    int    `bson:"level,omitempty" json:"level,omitempty"`
 	Items    []Item `bson:"items,omitempty" json:"items,omitempty"`
 	Quantity int    `bson:"quantity,omitempty" json:"quantity,omitempty"`
+}
+
+type BankInventoryResponse struct {
+	Data  []Item `json:"data"`
+	Total int    `json:"total"`
+	Page  int    `json:"page"`
+	Size  int    `json:"size"`
+	Pages int    `json:"pages"`
+}
+type BankInventoryParams struct {
+	ItemCode string `json:"itemCode"`
+	Page     int    `json:"page"`
+	Size     int    `json:"size"`
 }

@@ -45,6 +45,25 @@ func (a *artifacts) FindRocks(rock string) (int, int) {
 	}
 }
 
+// FindMonster
+// Returns the coordinates for different monsters.
+func (a *artifacts) FindMonster(monster string) (int, int) {
+	switch monster {
+	case "chicken":
+		return 0, 1
+	case "yellow_slime":
+		return 4, -1
+	case "blue_slime":
+		return 2, -1
+	case "red_slime":
+		return 1, -1
+	case "cow":
+		return 0, 2
+	default:
+		return 0, 0
+	}
+}
+
 // FindTrees
 // Returns the coordinates for different tree resources.
 func (a *artifacts) FindTrees(tree string) (int, int) {

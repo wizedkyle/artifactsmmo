@@ -32,7 +32,8 @@ func Init() {
 	if os.Getenv("GIN_MODE") == "" {
 		opts = options.Client().ApplyURI("mongodb://mongodb:27017")
 	} else {
-		// TODO: implement cosmosdb
+
+		opts = options.Client().ApplyURI("")
 	}
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {

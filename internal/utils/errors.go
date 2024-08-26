@@ -26,10 +26,12 @@ const (
 	GenericError                      = "Unknown error, server could be unavailable."
 	GenericInternalServerErrorMessage = "internal server error"
 	InvalidRequestBody                = "invalid request body"
+	ItemCannotBeRecycled              = "This item cannot be recycled."
 	ItemNotFound                      = "Item not found."
 	ItemsNotFound                     = "Items not found."
 	ItemMissingOrInsufficientQuantity = "Missing item or insufficient quantity in your inventory."
 	MapNotFound                       = "Map not found."
+	MonsterNotFound                   = "Monster not found."
 	NotAuthenticated                  = "Not authenticated."
 	ResourceNotFound                  = "Resource not found on this map."
 	TaskNotFound                      = "Task not found."
@@ -46,10 +48,12 @@ var (
 	ErrCharacterNotFound                 = errors.New(CharacterNotFound)
 	ErrCharacterNotAtSkillLevel          = errors.New(CharacterNotAtSkillLevel)
 	ErrGenericError                      = errors.New(GenericError)
+	ErrItemCannotBeRecycled              = errors.New(ItemCannotBeRecycled)
 	ErrItemNotFound                      = errors.New(ItemNotFound)
 	ErrItemsNotFound                     = errors.New(ItemsNotFound)
 	ErrItemMissingOrInsufficientQuantity = errors.New(ItemMissingOrInsufficientQuantity)
 	ErrMapNotFound                       = errors.New(MapNotFound)
+	ErrMonsterNotFound                   = errors.New(MonsterNotFound)
 	ErrNotAuthenticated                  = errors.New(NotAuthenticated)
 	ErrResourceNotFound                  = errors.New(ResourceNotFound)
 	ErrTaskNotFound                      = errors.New(TaskNotFound)

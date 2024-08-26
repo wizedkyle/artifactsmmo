@@ -21,19 +21,21 @@ func GenerateTaskRoutes(router *gin.Engine) {
 }
 
 func createTask(c *gin.Context) {
-	var request models.Task
+	var request models.CreateTask
 	transactionId, _ := utils.GetTransactionIdHeader(c)
-	if err := c.ShouldBind(&request); err != nil {
+	if err := c.ShouldBindJSON(&request); err != nil {
 		utilErr := utils.GenerateError(models.TaskCreated, utils.InvalidRequestBody, http.StatusBadRequest, transactionId.TransactionId, err)
 		utils.WriteErrorLog(utilErr)
 		c.AbortWithStatusJSON(utilErr.ExternalError.Code, utilErr.ExternalError)
 		return
 	}
 	result, err := database.Client.CreateTask(models.Task{
-		Action:   request.Action,
-		Item:     request.Item,
-		Quantity: request.Quantity,
-		Status:   request.Status,
+		Action:         request.Action,
+		ActionCategory: request.ActionCategory,
+		Monster:        request.Monster,
+		Item:           request.Item,
+		Quantity:       request.Quantity,
+		Character:      request.Character,
 	})
 	if err != nil {
 		utilErr := utils.GenerateError(models.TaskCreated, utils.GenericInternalServerErrorMessage, http.StatusInternalServerError, transactionId.TransactionId, err)
@@ -49,7 +51,7 @@ func listTasks(c *gin.Context) {
 	action := c.Query("action")
 	limit := utils.QueryLimit(c)
 	status := c.Query("status")
-	results, err := database.Client.ListTasks(action, limit, status)
+	results, err := database.Client.ListTasks(action, "", limit, status)
 	if errors.Is(err, utils.ErrTasksNotFound) {
 		utilErr := utils.GenerateError(models.TaskRetrieved, utils.TasksNotFound, http.StatusNotFound, transactionId.TransactionId, nil)
 		utils.WriteErrorLog(utilErr)

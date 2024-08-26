@@ -36,6 +36,20 @@ type CharacterMovement struct {
 	Character   Character   `json:"character"`
 }
 
+type CharacterRecyclingResponse struct {
+	Data RecyclingResponse `json:"data"`
+}
+
+type RecyclingResponse struct {
+	Cooldown  Cooldown               `json:"cooldown"`
+	Details   RecyclingItemsResponse `json:"details"`
+	Character Character              `json:"character"`
+}
+
+type RecyclingItemsResponse struct {
+	Items []Item `json:"items"`
+}
+
 type Character struct {
 	Name                    string          `json:"name"`
 	Skin                    string          `json:"skin"`

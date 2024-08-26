@@ -28,35 +28,26 @@ func main() {
 				continue
 			}
 			if c.Data.MiningLevel < models.IronLevel {
-				x = models.CopperX
-				y = models.CopperY
+				x, y = artifacts.Client.FindRocks(models.Copper)
 			} else if c.Data.MiningLevel < models.CoalLevel {
-				x = models.IronX
-				y = models.IronY
+				x, y = artifacts.Client.FindRocks(models.Iron)
 			} else if c.Data.MiningLevel < models.GoldLevel {
-				x = models.CoalX
-				y = models.CoalY
+				x, y = artifacts.Client.FindRocks(models.Coal)
 			} else {
-				x = models.GoldX
-				y = models.GoldY
+				x, y = artifacts.Client.FindRocks(models.Copper)
 			}
 		} else {
 			switch miningResource {
 			case models.Copper:
-				x = models.CopperX
-				y = models.CopperY
+				x, y = artifacts.Client.FindRocks(models.Copper)
 			case models.Iron:
-				x = models.IronX
-				y = models.IronY
+				x, y = artifacts.Client.FindRocks(models.Iron)
 			case models.Coal:
-				x = models.CoalX
-				y = models.CoalY
+				x, y = artifacts.Client.FindRocks(models.Coal)
 			case models.Gold:
-				x = models.GoldX
-				y = models.GoldY
+				x, y = artifacts.Client.FindRocks(models.Coal)
 			default:
-				x = models.CopperX
-				y = models.CopperY
+				x, y = artifacts.Client.FindRocks(models.Copper)
 			}
 		}
 		c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
