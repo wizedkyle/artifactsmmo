@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"crypto/tls"
 	"github.com/wizedkyle/artifactsmmo/v2/internal/utils"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -32,8 +33,7 @@ func Init() {
 	if os.Getenv("GIN_MODE") == "" {
 		opts = options.Client().ApplyURI("mongodb://mongodb:27017")
 	} else {
-
-		opts = options.Client().ApplyURI("")
+		opts = options.Client().ApplyURI(os.Getenv("CONNECTION_STRING")).SetTLSConfig(&tls.Config{})
 	}
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
