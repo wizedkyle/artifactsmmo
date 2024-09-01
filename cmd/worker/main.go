@@ -18,7 +18,7 @@ func main() {
 	for {
 		tasks, err := database.Client.ListTasks("", *artifacts.Client.CharacterName, 1, models.TaskStatusPending)
 		if errors.Is(err, utils.ErrTasksNotFound) {
-			utils.Logger.Info("no crafting tasks found", zap.Error(err))
+			utils.Logger.Info("no tasks found", zap.Error(err))
 			time.Sleep(10 * time.Second)
 			continue
 		} else if err != nil {
