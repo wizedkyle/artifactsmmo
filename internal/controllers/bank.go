@@ -44,24 +44,24 @@ func WithdrawCraftingItems(quantity int, items *models.ItemDetails) (int, error)
 	if err != nil {
 		return 0, errors.New("failed to get character information")
 	}
+	maxCraftableItems = c.Data.InventoryMaxItems / totalResourcesRequired
+	if quantity < maxCraftableItems {
+		maxCraftableItems = quantity
+	}
 	if len(c.Data.Inventory) == 0 {
-		currentInventorySize = models.InventorySize
+		currentInventorySize = c.Data.InventoryMaxItems
 	} else {
 		for _, inventory := range c.Data.Inventory {
 			currentInventorySize += inventory.Quantity
 		}
-		spareInventorySize := models.InventorySize - currentInventorySize
-		if spareInventorySize < totalResourcesRequired {
+		spareInventorySize := c.Data.InventoryMaxItems - currentInventorySize
+		if spareInventorySize < totalResourcesRequired*maxCraftableItems {
 			err := Move(models.Bank)
 			if err != nil {
 				return 0, err
 			}
 			DepositAllInventory(c.Data.Inventory)
 		}
-	}
-	maxCraftableItems = models.InventorySize / totalResourcesRequired
-	if quantity < maxCraftableItems {
-		maxCraftableItems = quantity
 	}
 	for _, item := range items.Craft.Items {
 		err := Move(models.Bank)

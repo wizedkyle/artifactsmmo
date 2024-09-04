@@ -60,6 +60,7 @@ const (
 	MiningWorkshop           string = "mining_workshop"
 	MiningWorkshopX          int    = 1
 	MiningWorkshopY          int    = 5
+	MagicTree                string = "magic_tree"
 	Shrimp                   string = "shrimp"
 	ShrimpLevel              int    = 10
 	ShrimpX                  int    = 5
@@ -68,6 +69,7 @@ const (
 	SpruceTreeLevel          int    = 10
 	SpruceTreeX              int    = 2
 	SpruceTreeY              int    = 6
+	StrangeRocks             string = "strange_rocks"
 	Trout                    string = "trout"
 	TroutLevel               int    = 20
 	TroutX                   int    = 7

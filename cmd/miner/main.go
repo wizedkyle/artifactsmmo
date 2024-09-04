@@ -45,7 +45,22 @@ func main() {
 			case models.Coal:
 				x, y = artifacts.Client.FindRocks(models.Coal)
 			case models.Gold:
-				x, y = artifacts.Client.FindRocks(models.Coal)
+				x, y = artifacts.Client.FindRocks(models.Gold)
+			case models.StrangeRocks:
+				events, err := artifacts.Client.ListEvents(models.GetAllEventsQueryParameters{})
+				if err != nil {
+					utils.Logger.Error("failed to list events", zap.Error(err))
+					x, y = artifacts.Client.FindRocks(models.Gold)
+					continue
+				}
+				for _, event := range events.Data {
+					if event.Name == "Strange Apparition" {
+						x = event.Map.X
+						y = event.Map.Y
+					} else {
+						x, y = artifacts.Client.FindRocks(models.Gold)
+					}
+				}
 			default:
 				x, y = artifacts.Client.FindRocks(models.Copper)
 			}
