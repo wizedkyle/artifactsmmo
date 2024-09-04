@@ -32,15 +32,16 @@ func (a *artifacts) FindBuilding(building string) (int, int) {
 // FindRocks
 // Returns the coordinates for different rock resources.
 func (a *artifacts) FindRocks(rock string) (int, int) {
-	if rock == models.Copper {
+	switch rock {
+	case models.Copper:
 		return models.CopperX, models.CopperY
-	} else if rock == models.Coal {
-		return models.CoalX, models.CoalY
-	} else if rock == models.Iron {
+	case models.Iron:
 		return models.IronX, models.IronY
-	} else if rock == models.Gold {
+	case models.Coal:
+		return models.CoalX, models.CoalY
+	case models.Gold:
 		return models.GoldX, models.GoldY
-	} else {
+	default:
 		return 0, 0
 	}
 }
@@ -67,5 +68,16 @@ func (a *artifacts) FindMonster(monster string) (int, int) {
 // FindTrees
 // Returns the coordinates for different tree resources.
 func (a *artifacts) FindTrees(tree string) (int, int) {
-	return 0, 0
+	switch tree {
+	case models.AshTree:
+		return models.AshTeeX, models.AshTreeY
+	case models.SpruceTree:
+		return models.SpruceTreeX, models.SpruceTreeY
+	case models.BirchTree:
+		return models.BirchTreeX, models.BirchTreeY
+	case models.DeadTree:
+		return models.DeadTreeX, models.DeadTreeY
+	default:
+		return 0, 0
+	}
 }

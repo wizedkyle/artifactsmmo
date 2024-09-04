@@ -28,32 +28,41 @@ func main() {
 				continue
 			}
 			if c.Data.WoodcuttingLevel < models.SpruceTreeLevel {
-				x = models.AshTeeX
-				y = models.AshTreeY
+				x, y = artifacts.Client.FindTrees(models.AshTree)
 			} else if c.Data.WoodcuttingLevel < models.BirchTreeLevel {
-				x = models.SpruceTreeX
-				y = models.SpruceTreeY
+				x, y = artifacts.Client.FindTrees(models.SpruceTree)
 			} else if c.Data.WoodcuttingLevel < models.DeadTreeLevel {
-				x = models.BirchTreeX
-				x = models.BirchTreeY
+				x, y = artifacts.Client.FindTrees(models.BirchTree)
 			} else {
-				x = models.DeadTreeX
-				y = models.DeadTreeY
+				x, y = artifacts.Client.FindTrees(models.DeadTree)
 			}
 		} else {
 			switch woodResource {
 			case models.AshTree:
-				x = models.AshTeeX
-				y = models.AshTreeY
+				x, y = artifacts.Client.FindTrees(models.AshTree)
 			case models.SpruceTree:
-				x = models.SpruceTreeX
-				y = models.SpruceTreeY
+				x, y = artifacts.Client.FindTrees(models.SpruceTree)
 			case models.BirchTree:
-				x = models.BirchTreeX
-				y = models.BirchTreeY
+				x, y = artifacts.Client.FindTrees(models.BirchTree)
+			case models.DeadTree:
+				x, y = artifacts.Client.FindTrees(models.DeadTree)
+			case models.MagicTree:
+				events, err := artifacts.Client.ListEvents(models.GetAllEventsQueryParameters{})
+				if err != nil {
+					utils.Logger.Error("failed to list events", zap.Error(err))
+					x, y = artifacts.Client.FindTrees(models.DeadTree)
+					continue
+				}
+				for _, event := range events.Data {
+					if event.Name == "Magic Apparition" {
+						x = event.Map.X
+						y = event.Map.Y
+					} else {
+						x, y = artifacts.Client.FindTrees(models.DeadTree)
+					}
+				}
 			default:
-				x = models.AshTeeX
-				y = models.AshTreeY
+				x, y = artifacts.Client.FindTrees(models.AshTree)
 			}
 		}
 		c, err := artifacts.Client.GetCharacter(*artifacts.Client.CharacterName)
