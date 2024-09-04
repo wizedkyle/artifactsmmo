@@ -53,6 +53,9 @@ func main() {
 					x, y = artifacts.Client.FindTrees(models.DeadTree)
 					continue
 				}
+				if len(events.Data) == 0 {
+					x, y = artifacts.Client.FindTrees(models.DeadTree)
+				}
 				for _, event := range events.Data {
 					if event.Name == "Magic Apparition" {
 						x = event.Map.X

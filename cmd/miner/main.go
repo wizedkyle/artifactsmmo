@@ -53,6 +53,9 @@ func main() {
 					x, y = artifacts.Client.FindRocks(models.Gold)
 					continue
 				}
+				if len(events.Data) == 0 {
+					x, y = artifacts.Client.FindRocks(models.Gold)
+				}
 				for _, event := range events.Data {
 					if event.Name == "Strange Apparition" {
 						x = event.Map.X
