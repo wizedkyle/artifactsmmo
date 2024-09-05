@@ -60,8 +60,6 @@ func main() {
 					if event.Name == "Strange Apparition" {
 						x = event.Map.X
 						y = event.Map.Y
-					} else {
-						x, y = artifacts.Client.FindRocks(models.Gold)
 					}
 				}
 			default:

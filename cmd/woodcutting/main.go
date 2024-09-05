@@ -60,8 +60,6 @@ func main() {
 					if event.Name == "Magic Apparition" {
 						x = event.Map.X
 						y = event.Map.Y
-					} else {
-						x, y = artifacts.Client.FindTrees(models.DeadTree)
 					}
 				}
 			default:
