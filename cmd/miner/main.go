@@ -62,6 +62,9 @@ func main() {
 						y = event.Map.Y
 					}
 				}
+				if x == 0 && y == 0 {
+					x, y = artifacts.Client.FindRocks(models.Gold)
+				}
 			default:
 				x, y = artifacts.Client.FindRocks(models.Copper)
 			}
