@@ -71,9 +71,10 @@ func CompleteCombatOrder(task models.Task) (string, error) {
 		} else if err != nil {
 			utils.Logger.Error("failed to fight", zap.Error(err))
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
+		} else {
+			fmt.Printf("%s fought %s and %s. It dropped %v. Fight number %d\n", *artifacts.Client.CharacterName, task.Monster, resp.Data.Fight.Result, resp.Data.Fight.Drops, i)
+			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 		}
-		fmt.Printf("%s fought %s and %s. It dropped %v. Fight number %d\n", *artifacts.Client.CharacterName, task.Monster, resp.Data.Fight.Result, resp.Data.Fight.Drops, i)
-		time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 	}
 	return "", nil
 }

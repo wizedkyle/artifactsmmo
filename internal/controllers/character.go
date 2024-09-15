@@ -38,7 +38,24 @@ func CraftingLevelCheck(craftingAction string, item *models.ItemDetails) error {
 		return errors.New("failed to get character information")
 	}
 	switch craftingAction {
-	// TODO: add the rest of the workshops
+	case models.CookingWorkshop:
+		if item.Craft.Level > c.Data.CookingLevel {
+			utils.Logger.Error("character cooking not at required level")
+			return errors.New("cooking not at required level, must be equal to or above " + strconv.Itoa(item.Craft.Level))
+		}
+		return nil
+	case models.GearcraftingWorkshop:
+		if item.Craft.Level > c.Data.GearCraftingLevel {
+			utils.Logger.Error("character gear crafting not at required level")
+			return errors.New("gear crafting not at required level, must be equal to or above " + strconv.Itoa(item.Craft.Level))
+		}
+		return nil
+	case models.JewelrycraftingWorkshop:
+		if item.Craft.Level > c.Data.JewelryCraftingLevel {
+			utils.Logger.Error("character jewelry crafting not at required level")
+			return errors.New("jewel crafting not at required level, must be equal to or above " + strconv.Itoa(item.Craft.Level))
+		}
+		return nil
 	case models.MiningWorkshop:
 		if item.Craft.Level > c.Data.MiningLevel {
 			utils.Logger.Error("character mining not at required level")
@@ -49,6 +66,12 @@ func CraftingLevelCheck(craftingAction string, item *models.ItemDetails) error {
 		if item.Craft.Level > c.Data.WeaponCraftingLevel {
 			utils.Logger.Error("character weapon crafting not at required level")
 			return errors.New("weapon crafting not at required level, must be equal to or above " + strconv.Itoa(item.Craft.Level))
+		}
+		return nil
+	case models.WoodcuttingWorkshop:
+		if item.Craft.Level > c.Data.WoodcuttingLevel {
+			utils.Logger.Error("character wood crafting not at required level")
+			return errors.New("woodcutting not at required level, must be equal to or above " + strconv.Itoa(item.Craft.Level))
 		}
 		return nil
 	default:
