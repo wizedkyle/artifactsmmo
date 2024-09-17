@@ -8,7 +8,6 @@ import (
 	"github.com/wizedkyle/artifactsmmo/v2/internal/models"
 	"github.com/wizedkyle/artifactsmmo/v2/internal/utils"
 	"net/http"
-	"strconv"
 )
 
 func GenerateItemRoutes(router *gin.Engine) {
@@ -25,13 +24,7 @@ func listItems(c *gin.Context) {
 	limit := utils.QueryLimit(c)
 	itemType := c.Query("type")
 	subType := c.Query("subtype")
-	level, err := strconv.Atoi(c.Query("level"))
-	if err != nil {
-		utilErr := utils.GenerateError(models.ItemRetrieved, utils.GenericInternalServerErrorMessage, http.StatusInternalServerError, transactionId.TransactionId, err)
-		utils.WriteErrorLog(utilErr)
-		c.AbortWithStatusJSON(utilErr.ExternalError.Code, utilErr.ExternalError)
-		return
-	}
+	level := utils.QueryLevel(c)
 	results, err := database.Client.ListItems(limit, models.ListItemParameters{
 		Type:    itemType,
 		SubType: subType,

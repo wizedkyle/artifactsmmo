@@ -13,3 +13,12 @@ func QueryLimit(c *gin.Context) int64 {
 	}
 	return limitInt64
 }
+
+func QueryLevel(c *gin.Context) int {
+	level := c.DefaultQuery("level", "0")
+	levelInt, err := strconv.Atoi(level)
+	if err != nil {
+		return 0
+	}
+	return levelInt
+}

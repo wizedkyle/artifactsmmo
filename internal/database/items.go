@@ -49,10 +49,15 @@ func (d *database) GetItem(code string) (*models.ItemDetails, error) {
 func (d *database) ListItems(limit int64, params models.ListItemParameters) (*[]models.ItemDetails, error) {
 	var items []models.ItemDetails
 	opts := options.Find().SetLimit(limit)
-	filter := bson.D{
-		{"type", params.Type},
-		{"subType", params.SubType},
-		{"level", params.Level},
+	filter := bson.D{}
+	if params.Type != "" {
+		filter = append(filter, bson.E{"type", params.Type})
+	}
+	if params.SubType != "" {
+		filter = append(filter, bson.E{"subType", params.SubType})
+	}
+	if params.Level > 0 {
+		filter = append(filter, bson.E{"level", params.Level})
 	}
 	cursor, err := d.ItemsCollection.Find(context.TODO(), filter, opts)
 	if err != nil {
