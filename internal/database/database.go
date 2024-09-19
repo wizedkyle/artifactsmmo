@@ -33,7 +33,7 @@ func Init() {
 	if os.Getenv("GIN_MODE") == "" {
 		opts = options.Client().ApplyURI("mongodb://mongodb:27017")
 	} else {
-		opts = options.Client().ApplyURI(os.Getenv("CONNECTION_STRING")).SetTLSConfig(&tls.Config{})
+		opts = options.Client().ApplyURI(os.Getenv("CONNECTION_STRING")).SetTLSConfig(&tls.Config{}).SetRetryWrites(false)
 	}
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
