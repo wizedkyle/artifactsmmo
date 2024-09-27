@@ -75,6 +75,15 @@ func CompleteCombatOrder(task models.Task) (string, error) {
 			fmt.Printf("%s fought %s and %s. It dropped %v. Fight number %d\n", *artifacts.Client.CharacterName, task.Monster, resp.Data.Fight.Result, resp.Data.Fight.Drops, i)
 			time.Sleep(utils.CalculateTimeDifference(resp.Data.Cooldown.StartedAt, resp.Data.Cooldown.Expiration))
 		}
+		updatedTask, err := database.Client.GetTask(task.Id)
+		if err != nil {
+			utils.Logger.Error("failed to get task status", zap.String("task", task.Id), zap.Error(err))
+			return "failed to get task status", err
+		}
+		if updatedTask.Status == models.TaskStatusCancelled {
+			utils.Logger.Info("task cancelling due to cancelled status", zap.String("task", task.Id))
+			break
+		}
 	}
 	return "", nil
 }

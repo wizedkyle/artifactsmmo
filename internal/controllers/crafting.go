@@ -72,6 +72,15 @@ func CompleteCraftingOrder(task models.Task) (string, error) {
 		if err != nil {
 			return "failed to withdraw items", err
 		}
+		updatedTask, err := database.Client.GetTask(task.Id)
+		if err != nil {
+			utils.Logger.Error("failed to get task status", zap.String("task", task.Id), zap.Error(err))
+			return "failed to get task status", err
+		}
+		if updatedTask.Status == models.TaskStatusCancelled {
+			utils.Logger.Info("task cancelling due to cancelled status", zap.String("task", task.Id))
+			break
+		}
 	}
 	return "", nil
 }

@@ -75,6 +75,7 @@ const (
 	TroutX                   int    = 7
 	TroutY                   int    = 12
 	ItemRetrieved            string = "item_retrieved"
+	TaskCancelled            string = "task_cancelled"
 	TaskCreated              string = "task_created"
 	TaskRetrieved            string = "task_retrieved"
 	WeaponcraftingWorkshop   string = "weaponcrafting_workshop"

@@ -71,8 +71,4 @@ func main() {
 		}
 		time.Sleep(10 * time.Second)
 	}
-	// list all pending tasks from the database with a type of crafting
-	// if no results continue
-	// if results get the first array record
-	// for number of quantity do crafting task
 }

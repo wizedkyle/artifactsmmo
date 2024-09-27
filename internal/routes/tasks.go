@@ -14,10 +14,36 @@ func GenerateTaskRoutes(router *gin.Engine) {
 	taskRoutes := router.Group("/v1/tasks")
 	taskRoutes.Use(middleware.ValidateTransactionId())
 	{
+		taskRoutes.POST("/:id/cancel", cancelTask)
 		taskRoutes.POST("", createTask)
 		taskRoutes.GET("", listTasks)
 		taskRoutes.GET(":id", getTask)
 	}
+}
+
+func cancelTask(c *gin.Context) {
+	var request models.CancelTask
+	transactionId, _ := utils.GetTransactionIdHeader(c)
+	id := c.Param("id")
+	if err := c.ShouldBindJSON(&request); err != nil {
+		utilErr := utils.GenerateError(models.TaskCancelled, utils.InvalidRequestBody, http.StatusBadRequest, transactionId.TransactionId, err)
+		utils.WriteErrorLog(utilErr)
+		c.AbortWithStatusJSON(utilErr.ExternalError.Code, utilErr.ExternalError)
+		return
+	}
+	err := database.Client.UpdateTask(id, request.Reason, models.TaskStatusCancelled)
+	if errors.Is(err, utils.ErrTaskNotFound) {
+		utilErr := utils.GenerateError(models.TaskCancelled, utils.TaskNotFound, http.StatusNotFound, transactionId.TransactionId, nil)
+		utils.WriteErrorLog(utilErr)
+		c.AbortWithStatusJSON(utilErr.ExternalError.Code, utilErr.ExternalError)
+		return
+	} else if err != nil {
+		utilErr := utils.GenerateError(models.TaskCancelled, utils.GenericInternalServerErrorMessage, http.StatusInternalServerError, transactionId.TransactionId, err)
+		utils.WriteErrorLog(utilErr)
+		c.AbortWithStatusJSON(utilErr.ExternalError.Code, utilErr.ExternalError)
+		return
+	}
+	c.Status(http.StatusNoContent)
 }
 
 func createTask(c *gin.Context) {
