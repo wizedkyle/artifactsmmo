@@ -68,6 +68,8 @@ func (a *artifacts) FindMonster(monster string) (int, int) {
 		return -2, 1
 	case "skeleton":
 		return 8, 6
+	case "pig":
+		return -3, -3
 	default:
 		return 0, 0
 	}
